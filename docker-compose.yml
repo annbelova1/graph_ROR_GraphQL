@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+
+  mongo-service:
+    image: "mongo:4.2.8"
+    restart: always
+    environment:
+      # mongodb client connection
+      MONGO_INITDB_DATABASE: rails_api_development
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
+    volumes:
+      - "mongodb:/var/lib/mongodb/data"
+
+      
+  
+  rails-api:
+    build: ./rails-api
+    environment:
+      - PORT=3000
+    volumes:
+      - ./rails-api:/rails-api:delegated
+      - rails_log:/rails-api/log
+      # don't mount tmp directory
+      - /rails-api/tmp
+      - ./rails-api/storage:/rails/storage
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo-service
+
+  front-vue:
+    build: ./front-vue
+    ports:
+      - "8080:8080" # use port that you want to in your local instead of 8091
+    volumes:
+      - ./front-vue:/front-vue
+      - front_node_modules:/front-vue/node_modules
+
+volumes:
+  mongodb:
+  rails_log:
+  front_node_modules:

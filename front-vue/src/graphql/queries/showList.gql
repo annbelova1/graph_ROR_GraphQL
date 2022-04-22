@@ -1,0 +1,8 @@
+query showList() {
+  showList() {
+    id
+    name
+    nodeIndex
+    customizedFields
+  }
+}

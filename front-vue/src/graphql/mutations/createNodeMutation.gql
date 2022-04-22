@@ -1,0 +1,10 @@
+mutation createNodeMutation($node: CreateNodeInput!) {
+  createNode(node: $node}) {
+    node {
+      id
+      name
+      customizedFields
+      nodeIndex
+    }
+  }
+}
