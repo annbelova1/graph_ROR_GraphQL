@@ -36,11 +36,11 @@ http://localhost:8080
 ```graphql
 mutation {
   createNode(node: {
-    name: "llooo", 
-    customizedFields: { label: "label", age: 67 }}) {
+    label: "label", 
+    customizedFields: { node_uniq_field: ""New Uniquness", age: 67 }}) {
     node {
       id
-      name
+      label
       nodeIndex
       customizedFields
       _neighbours
@@ -52,11 +52,11 @@ mutation {
 ```graphql
 mutation {
   updateNode(nodeIndex: 1, nodeParams: { 
-    name: "New Node Name", 
-    customizedFields: { label: "New label",  node_age: 67 }}) {
+    label: "New Node Name", 
+    customizedFields: { node_uniq_field: "New Uniquness 1",  node_age: 67 }}) {
     node {
       id
-      name
+      label
       nodeIndex
       customizedFields
       _neighbours
@@ -67,10 +67,10 @@ mutation {
 ---------------------------------------------------------------------------------
 ```graphql
 mutation {
-  createEdge(firstNodeIndex: 1, secondNodeIndex: 3, undirected: true) {
+  createEdge(firstNodeIndex: "1", secondNodeIndex: "3", undirected: true) {
     node {
       id
-      name
+      label
       nodeIndex
       _neighbours
       customizedFields
@@ -84,7 +84,7 @@ mutation {
   removeEdge(firstNodeIndex: 1, secondNodeIndex: 2) {
     node {
       id
-      name
+      label
       nodeIndex
       _neighbours
       customizedFields
@@ -109,7 +109,7 @@ mutation {
 query {
   showList {
     id
-    name
+    label
     nodeIndex
     _neighbours
     customizedFields

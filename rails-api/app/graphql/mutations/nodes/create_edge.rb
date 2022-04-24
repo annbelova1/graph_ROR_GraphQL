@@ -10,16 +10,18 @@ module Mutations
         field :node, Types::NodeType, null: false
 
         def resolve(first_node_index:, second_node_index:, undirected: false)
-            node = EdgeCreator.new(
+            node = EdgeCreator.run(
                 first_node_index.to_i,
                 second_node_index.to_i,
                 undirected
-            ).call
+            )
 
-            if node.errors.present?  
-                raise GraphQL::ExecutionError.new(node.errors.full_messages.join(', '))
+            if node.ok?  
+                {
+                    node: node.value 
+                }
             else
-                {node: node}
+                raise GraphQL::ExecutionError.new(node.error)
             end
         end
       end

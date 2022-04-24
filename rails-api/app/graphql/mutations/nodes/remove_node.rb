@@ -8,12 +8,14 @@ module Mutations
         field :result, Types::RemoveNodeResult, null: false
 
         def resolve(node_index:)
-            result = NodeRemover.new(node_index).call
+            result = NodeRemover.run(node_index)
 
-            if result.present? 
-                {result: result}
+            if result.ok?  
+                {
+                    result: result.value
+                }
             else
-                raise GraphQL::ExecutionError.new(result)
+                raise GraphQL::ExecutionError.new(result.error)
             end
         end
       end

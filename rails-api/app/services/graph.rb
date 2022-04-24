@@ -1,13 +1,13 @@
 require 'ruby-graphviz'
 
-class Graph  
+class Graph  < BaseService
     attr_reader :graph, :file
     def initialize
         @graph = GraphViz.new(:G, :type => :digraph)
         @file = "#{Rails.root}/public/graph.png"
     end
     
-    def call
+    def run
         Node.not.where(node_index: nil).order(:node_index.asc).to_a.each do |node|
             node._neighbours.compact.each do |index| 
                 graph.add_edge(node.node_index, index) if node.node_index != index 
@@ -29,8 +29,6 @@ class Graph
         graph.output(png: file) 
 
         file
-    rescue StandardError => e
-        Rails.logger.error e.message
     end
 end
   

@@ -1,15 +1,13 @@
-class EdgeCreator
-    attr_reader :first_node, :second_node, :undirected
+class EdgeCreator < BaseService
+    attr_reader :first_node_index, :second_node_index, :undirected
 
     def initialize(first_node_index, second_node_index, undirected)
-        @first_node = Node.find_by(node_index: first_node_index)
-        @second_node = Node.find_by(node_index: second_node_index)
+        @first_node_index = first_node_index
+        @second_node_index = second_node_index
         @undirected = undirected
     end
 
-    def call
-        raise ArgumentError.new("To create edge it's necessary two nodes") unless first_node && second_node
-
+    def run
         if undirected
             first_node.create_undirected_edge(second_node)
         else
@@ -17,7 +15,13 @@ class EdgeCreator
         end
 
         second_node
-    rescue StandardError => e
-        Rails.logger.error e.message
+    end
+
+    def first_node
+        @first_node = Node.find_by(node_index: first_node_index)
+    end
+
+    def second_node
+        @second_node = Node.find_by(node_index: second_node_index)
     end
 end

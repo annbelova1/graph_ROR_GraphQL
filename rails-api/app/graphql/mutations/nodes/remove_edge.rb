@@ -9,15 +9,17 @@ module Mutations
         field :node, Types::NodeType, null: false
 
         def resolve(first_node_index:, second_node_index:)
-            node = EdgeRemover.new(
+            node = EdgeRemover.run(
                 first_node_index,
                 second_node_index,
-            ).call
+            )
 
-            if node.errors.present?  
-                raise GraphQL::ExecutionError.new(node.errors.full_messages.join(', '))
+            if node.ok?  
+                {
+                    node: node.value
+                }
             else
-                {node: node}
+                raise GraphQL::ExecutionError.new(node.error)
             end
         end
       end
