@@ -5,7 +5,7 @@ module Mutations
   
         argument :node_index, Integer, required: true
 
-        field :result, Types::RemoveEdgeResult, null: false
+        field :result, Types::RemoveNodeResult, null: false
 
         def resolve(node_index:)
             result = NodeRemover.new(node_index).call

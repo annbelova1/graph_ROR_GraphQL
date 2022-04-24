@@ -3,8 +3,8 @@ require 'ruby-graphviz'
 class Graph  
     attr_reader :graph, :file
     def initialize
-        @graph = GraphViz.new( :G, :type => :digraph )
-        @file = File.new("#{Rails.root}/graph1.png", "w")
+        @graph = GraphViz.new(:G, :type => :digraph)
+        @file = "#{Rails.root}/public/graph.png"
     end
     
     def call
@@ -25,7 +25,12 @@ class Graph
             end
         end
 
-        graph.output(png: file)
+        File.delete(file) if File.exist?(file)
+        graph.output(png: file) 
+
+        file
+    rescue StandardError => e
+        Rails.logger.error e.message
     end
 end
   

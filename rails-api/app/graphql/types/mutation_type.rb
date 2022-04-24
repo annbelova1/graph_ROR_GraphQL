@@ -1,6 +1,5 @@
 module Types
   class MutationType < Types::BaseObject
- 
     field :create_node, mutation: Mutations::Nodes::CreateNode
     field :create_edge, mutation: Mutations::Nodes::CreateEdge
     field :remove_edge, mutation: Mutations::Nodes::RemoveEdge

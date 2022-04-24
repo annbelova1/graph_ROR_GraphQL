@@ -1,0 +1,7 @@
+mutation removeNode($nodeIndex: Int!) {
+  removeNode(nodeIndex: $nodeIndex) {
+    result {
+      deletedCount
+    }
+  }
+}

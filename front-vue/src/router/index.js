@@ -11,10 +11,10 @@ const routes = [
   },
 
   {
-    path: "/lists/:listId",
-    name: "ListShow",
+    path: "/add_node",
+    name: "AddNode",
     component: () =>
-      import(/* webpackChunkName: "listShow" */ "../views/listShow.vue"),
+      import(/* webpackChunkName: "listShow" */ "../views/addNode.vue"),
   },
 ];
 

@@ -8,6 +8,8 @@ class EdgeCreator
     end
 
     def call
+        raise ArgumentError.new("To create edge it's necessary two nodes") unless first_node && second_node
+
         if undirected
             first_node.create_undirected_edge(second_node)
         else
@@ -15,5 +17,7 @@ class EdgeCreator
         end
 
         second_node
+    rescue StandardError => e
+        Rails.logger.error e.message
     end
 end

@@ -1,8 +1,9 @@
-query showList() {
-  showList() {
+query showList {
+  showList {
     id
     name
     nodeIndex
     customizedFields
+    _neighbours
   }
 }

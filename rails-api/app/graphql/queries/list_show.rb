@@ -1,13 +1,12 @@
 module Queries
-  class GraphShow < BaseQuery
-  description "Get the customed list"
+  class ListShow < BaseQuery
+  description "Get list of nodes"
 
   # Inputs
-  argument :id, ID, required: false, description: "List Id"
 
   type [Types::NodeType], null: true
 
-  def resolve(id: nil)
+  def resolve
       Node.all
   rescue
       raise GraphQL::ExecutionError.new("List Not Found")

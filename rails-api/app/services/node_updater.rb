@@ -8,7 +8,7 @@ class NodeUpdater
     end
 
     def call
-        raise ArgumentError unless node
+        raise ArgumentError.new("Node doesn't exist") unless node
 
         modified_params = node_params.to_h.except(:customized_fields, :node_index)
         node_params.customized_fields[0].each do |k, v|

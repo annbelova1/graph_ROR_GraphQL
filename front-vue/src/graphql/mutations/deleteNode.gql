@@ -1,5 +1,0 @@
-mutation deleteNode($id: ID!) {
-  deleteNode(id: $id) {
-    success
-  }
-}

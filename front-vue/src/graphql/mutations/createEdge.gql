@@ -1,0 +1,10 @@
+mutation createEdge($firstNodeIndex: String!, $secondNodeIndex: String!, $undirected: Boolean) {
+  createEdge(firstNodeIndex: $firstNodeIndex, secondNodeIndex: $secondNodeIndex, undirected: $undirected) {
+    node {
+      id
+      name
+      customizedFields
+      nodeIndex
+    }
+  }
+}

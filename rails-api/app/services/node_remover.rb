@@ -8,7 +8,7 @@ class NodeRemover
     end
 
     def call     
-        raise ArgumentError unless node
+        raise ArgumentError.new("Node doesn't exist") unless node
          
         updated_bulk = @nodes.map do |v|
             next unless v._neighbours.include? node_index
@@ -24,8 +24,10 @@ class NodeRemover
             [updated_bulk, deleted_node].flatten.compact
         ).execute
 
-        Rails.logger.info "updated #{result.modified_count}, rempved #{result.deleted_count}"
+        Rails.logger.info "updated #{result.modified_count}, removed #{result.deleted_count}"
 
         result.validate!
+    rescue StandardError => e
+        Rails.logger.error e.message
     end
 end

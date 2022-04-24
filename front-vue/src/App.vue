@@ -1,95 +1,227 @@
 <template>
-  <div id="app">
-  <div class="home">
-    <div class="mt-2 md:mt-8 lg:mt-16 max-w-xl mx-auto">
-      <div class="bg-white p-8 shadow rounded-lg">
-        <br />
-        <h1 class="text-3xl uppercase font-semibold tracking-wide text-center">
-          Welcome To ToDos
-        </h1>
-        <div class="text-center m-2" @click="createNodeModal = true">
-          <button
-            type="button"
-            class="px-4 py-2 bg-black text-white rounded-lg"
-          >
-            <font-awesome-icon
-              icon="plus"
-              class="text-white"
-            ></font-awesome-icon>
-            <span class="font-semibold uppercase"> Add Node</span>
-          </button>
-        </div>
-        <custom-modal
-          :showing="createNodeModal"
-          @close="createNodeModal = false"
-        >
-          <ApolloMutation
+<div>
+    <div class="bg-white p-8 shadow rounded-lg">
+      <button type="button"
+        <BreadcrumbItem>
+          <a href="http://localhost:3000/download" class="px-4 py-2 rounded tracking-wide font-semibold bg-black text-white text-lg hover:bg-gray-800 shadow-lg"> Download Graph </a>
+          </BreadcrumbItem>
+        </button>
+      </div>
+      <ApolloMutation
             :mutation="require('@/graphql/mutations/createNode.gql')"
-            :variables="{ name }"
-            @done="NodeCreated"
-          >
+            :variables="{ node: { name: name, customizedFields: {"custom_key": custom_value} }}"
+            @done="taskAdded">
             <template v-slot="{ mutate, loading, error }">
-              <form action="#" class="mt-5" @submit.prevent="mutate()">
-                <div class="form-group mb-5">
+              <form action="#" @submit.prevent="mutate()">
+                <b-container class="bv-example-row">    
+                <b-row>
+                <b-col>
+                <input
+                  type="text"
+                  name="name"
+                  class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12"
+                  style="width=50px; margin: 1em 10em;"
+                  placeholder="Node Name"
+                  id="node-name"
+                  autocomplete="on"
+                  v-model="name"/>
+                </b-col>
+                
+              </b-row>
+                <b-row>
+                <b-col>
                   <input
-                    type="text"
-                    name="name"
-                    class="rounded w-full shadow p-2 border border-gray-900 tracking-wide text-lg"
-                    placeholder="Name"
-                    id="create-list-name"
-                    autocomplete="on"
-                    v-model="name"
-                    autofocus
-                  />
-                </div>
+                  type="text"
+                  class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12"
+                  style="width=50px; margin: 1em 10em;"
+                  placeholder="New Node Field"
+                  id="node-name"
+                  autocomplete="on"
+                  v-model="custom_key"/>
+                  
+                </b-col>
+                <b-col>
+                  <input
+                  type="text"
+                  class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12"
+                  style="width=50px; margin: 1em 10em;"
+                  placeholder="New Node Value"
+                  id="node-name"
+                  autocomplete="on"
+                  v-model="custom_value"/>
+                  </b-col>
+                </b-row>
+              </b-container>
                 <div class="text-center flex justify-between">
-                  <a
-                    href="#"
-                    @click.prevent="createNodeModal = false"
-                    class="self-center hover:underline hover:text-gray-800"
-                    >Cancel</a
-                  >
                   <button
                     type="submit"
+                    style="width=50px;margin: 1em 10em;"
                     :disabled="loading"
                     class="px-4 py-2 rounded tracking-wide font-semibold bg-black text-white text-lg hover:bg-gray-800 shadow-lg"
                   >
                     Create
                   </button>
                 </div>
-              </form>
+                </form>
+
             </template>
           </ApolloMutation>
-        </custom-modal>
+        <hr />
+        <ApolloMutation
+            :mutation="require('@/graphql/mutations/createEdge.gql')"
+            :variables="{ firstNodeIndex: first_index, secondNodeIndex: second_index, undirected: undirected }"
+            @done="taskAdded">
+            >
+           <template v-slot="{ mutate, loading, error }">
 
-      </div>
-    </div>
+            <form action="#" @submit.prevent="mutate()">
+                <input
+                  type="number"
+                  class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12"
+                  style="width=50px; margin: 1em 10em;"
+                  placeholder="First Node Index"
+                  id="node-index"
+                  v-model="first_index"/>
+
+                <input
+                  type="number"
+                  class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12"
+                  style="width=50px; margin: 1em 10em;"
+                  placeholder="Second Node Index"
+                  id="node-index"
+                  v-model="second_index"/>
+      
+                <div class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12" style="width=30px; margin: 1em 10em;">
+                  <input type="checkbox" id="undirected" v-model="undirected" style="padding: 10px;">
+                  <label style="padding: 10px;" for="undirected">Undirected</label>
+                </div>
+
+                <div class="text-center flex justify-between">
+                  <button
+                    type="submit"
+                    style="width=50px;margin: 1em 10em;"
+                    :disabled="loading"
+                    class="px-4 py-2 rounded tracking-wide font-semibold bg-black text-white text-lg hover:bg-gray-800 shadow-lg"
+                  >
+                    Create Edge
+                  </button>
+                </div>
+                </form>
+              </template>
+        </ApolloMutation> 
+        <hr />  
+      <div style="margin: 1em 3em;">
+
+      </ul>
+      <li class="mb-2 p-2 pl-5 shadow tracking-wide rounded-lg text-xl">
+        <span> Index </span>
+        <span> Name</span>
+        <span> Edges</span>
+        <span> Custom Fields </span>
+      </li>
+      <br>
+      <li
+        v-for="node in nodes"
+        :key="node.id"
+        class="mb-2 p-2 pl-5 shadow tracking-wide rounded-lg text-xl"
+        placeholder=node.id
+      >
+        
+    
+      <span> {{ node.nodeIndex }}</span>
+      <span> {{ node.name }}</span>
+      <span> {{ node._neighbours.join(', ') }}</span>
+      <span style="margin: 10px;" v-for="(value, name) in node.customizedFields">
+        {{ name }}: {{ value }}
+      </span>
+
+      <span @click.prevent="removeNode(node)">
+        <font-awesome-icon
+          icon="trash"
+          class="text-black float-right"
+        ></font-awesome-icon>
+      </span>
+    </li>
+  </ul>
   </div>
-    <router-view />
   </div>
 </template>
 
+<style>
+a:link, a:visited {
+  background-color: white;
+  color: black;
+  border: 2px solid green;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a:hover, a:active {
+  background-color: green;
+  color: white;
+}
+
+hr {
+    margin: 20px 0;
+    border: 1px solid green;
+}
+
+span {
+  margin: 80px;
+}
+</style>
 
 <script>
 import gql from "graphql-tag";
 export default {
   name: "ListShow",
-  props: ["listId"],
   data() {
     return {
       list: {},
-      tasks: [],
+      nodes: [],
       name: "",
+      first_index: null,
+      second_index: null,
+      indirected: "",
+      custom_value: "",
+      custom_key: ""
     };
   },
   apollo: {},
   methods: {
+    add () {
+      this.inputs.push({
+        name: '',
+        party: ''
+      })
+      console.log(this.inputs)
+    },
 
-    async deleteNode(task) {
+    remove (index) {
+      this.inputs.splice(index, 1)
+    },
+
+    async getList() {
+      return await this.$apollo.query({
+        query: require("@/graphql/queries/showList.gql"),
+        variables: { },
+        fetchPolicy: "network-only",
+      });
+    },
+    async loadList() {
+      const result = await this.getList();
+      if (!!result.data) {
+        this.nodes = result.data.showList;
+      }
+    },
+
+    async removeNode(node) {
       const result = await this.$apollo.mutate({
-        mutation: require("@/graphql/mutations/deleteNode.gql"),
+        mutation: require("@/graphql/mutations/removeNode.gql"),
         variables: {
-          id: task.id,
+          nodeIndex: node.nodeIndex,
         },
       });
       if (!!result.data) {
@@ -98,6 +230,9 @@ export default {
     },
     taskAdded() {
       this.name = "";
+      this.first_index = "";
+      this.second_index = "";
+      this.undirected = false;
       this.loadList();
     },
   },

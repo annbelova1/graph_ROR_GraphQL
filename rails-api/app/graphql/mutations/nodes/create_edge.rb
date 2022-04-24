@@ -3,16 +3,16 @@ module Mutations
       class CreateEdge < BaseMutation
         description "Create Edge"
   
-        argument :first_node_index, Integer, required: true
-        argument :second_node_index, Integer, required: true
+        argument :first_node_index, String, required: true
+        argument :second_node_index, String, required: true
         argument :undirected, Boolean, required: false
 
         field :node, Types::NodeType, null: false
 
         def resolve(first_node_index:, second_node_index:, undirected: false)
             node = EdgeCreator.new(
-                first_node_index,
-                second_node_index,
+                first_node_index.to_i,
+                second_node_index.to_i,
                 undirected
             ).call
 

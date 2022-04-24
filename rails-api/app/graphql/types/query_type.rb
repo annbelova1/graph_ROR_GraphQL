@@ -10,7 +10,10 @@ module Types
     field :nodes, String, null: false,
       description: "An example field added by the generator"
 
-    field :show_list, resolver: Queries::Lists::ListShow
+    field :show_list, resolver: Queries::ListShow
+    field :download_graph, resolver: Queries::DownloadGraph
+
+    # field :graph_show, resolver: Queries::GraphShow
 
     def nodes
       Node.pluck :name

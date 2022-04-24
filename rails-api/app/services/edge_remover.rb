@@ -7,10 +7,12 @@ class EdgeRemover
     end
 
     def call
-        return unless first_node || second_node
+        raise ArgumentError.new("To create edge it's necessary two nodes") unless first_node && second_node
 
         first_node.drop_undirected_edge(second_node)
 
         first_node
+    rescue StandardError => e
+        Rails.logger.error e.message
     end
 end
