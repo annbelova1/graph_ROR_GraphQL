@@ -1,7 +1,7 @@
 query showList {
   showList {
     id
-    name
+    label
     nodeIndex
     customizedFields
     _neighbours

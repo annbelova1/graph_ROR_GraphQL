@@ -8,12 +8,14 @@ module Mutations
       field :node, Types::NodeType, null: false
 
       def resolve(node:)
-        node = NodeCreator.new(node).call
+        node = NodeCreator.run(node)
 
-        if node.errors.present?  
-            raise GraphQL::ExecutionError.new(node.errors.full_messages.join(', '))
+        if node.ok?  
+          {
+            node: node.value
+          }
         else
-            {node: node}
+          raise GraphQL::ExecutionError.new(node.error)
         end
       end
     end

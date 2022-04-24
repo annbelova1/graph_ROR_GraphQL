@@ -4,7 +4,7 @@ class Node
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
 
-  field :name, type: String
+  field :label, type: String
   validates_uniqueness_of :node_index
   before_validation :set_node_index
 

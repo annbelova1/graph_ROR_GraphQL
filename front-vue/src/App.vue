@@ -9,49 +9,20 @@
       </div>
       <ApolloMutation
             :mutation="require('@/graphql/mutations/createNode.gql')"
-            :variables="{ node: { name: name, customizedFields: {"custom_key": custom_value} }}"
+            :variables="{ node: { label: label }}"
             @done="taskAdded">
             <template v-slot="{ mutate, loading, error }">
               <form action="#" @submit.prevent="mutate()">
-                <b-container class="bv-example-row">    
-                <b-row>
-                <b-col>
                 <input
                   type="text"
                   name="name"
                   class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12"
                   style="width=50px; margin: 1em 10em;"
-                  placeholder="Node Name"
-                  id="node-name"
+                  placeholder="Node Label"
+                  id="node-label"
                   autocomplete="on"
-                  v-model="name"/>
-                </b-col>
-                
-              </b-row>
-                <b-row>
-                <b-col>
-                  <input
-                  type="text"
-                  class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12"
-                  style="width=50px; margin: 1em 10em;"
-                  placeholder="New Node Field"
-                  id="node-name"
-                  autocomplete="on"
-                  v-model="custom_key"/>
-                  
-                </b-col>
-                <b-col>
-                  <input
-                  type="text"
-                  class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12"
-                  style="width=50px; margin: 1em 10em;"
-                  placeholder="New Node Value"
-                  id="node-name"
-                  autocomplete="on"
-                  v-model="custom_value"/>
-                  </b-col>
-                </b-row>
-              </b-container>
+                  v-model="label"/>    
+ 
                 <div class="text-center flex justify-between">
                   <button
                     type="submit"
@@ -71,7 +42,7 @@
             :mutation="require('@/graphql/mutations/createEdge.gql')"
             :variables="{ firstNodeIndex: first_index, secondNodeIndex: second_index, undirected: undirected }"
             @done="taskAdded">
-            >
+
            <template v-slot="{ mutate, loading, error }">
 
             <form action="#" @submit.prevent="mutate()">
@@ -90,12 +61,7 @@
                   placeholder="Second Node Index"
                   id="node-index"
                   v-model="second_index"/>
-      
-                <div class="mb-2 rounded shadow p-2 border border-gray-900 tracking-wide text-lg pl-12" style="width=30px; margin: 1em 10em;">
-                  <input type="checkbox" id="undirected" v-model="undirected" style="padding: 10px;">
-                  <label style="padding: 10px;" for="undirected">Undirected</label>
-                </div>
-
+ 
                 <div class="text-center flex justify-between">
                   <button
                     type="submit"
@@ -103,19 +69,21 @@
                     :disabled="loading"
                     class="px-4 py-2 rounded tracking-wide font-semibold bg-black text-white text-lg hover:bg-gray-800 shadow-lg"
                   >
-                    Create Edge
+                    Create Undirected Edge
                   </button>
                 </div>
-                </form>
-              </template>
+              </form>
+
+            </template>
         </ApolloMutation> 
+
         <hr />  
       <div style="margin: 1em 3em;">
 
       </ul>
       <li class="mb-2 p-2 pl-5 shadow tracking-wide rounded-lg text-xl">
         <span> Index </span>
-        <span> Name</span>
+        <span> Label</span>
         <span> Edges</span>
         <span> Custom Fields </span>
       </li>
@@ -129,7 +97,7 @@
         
     
       <span> {{ node.nodeIndex }}</span>
-      <span> {{ node.name }}</span>
+      <span> {{ node.label }}</span>
       <span> {{ node._neighbours.join(', ') }}</span>
       <span style="margin: 10px;" v-for="(value, name) in node.customizedFields">
         {{ name }}: {{ value }}
@@ -181,28 +149,14 @@ export default {
     return {
       list: {},
       nodes: [],
-      name: "",
+      label: "",
       first_index: null,
       second_index: null,
-      indirected: "",
-      custom_value: "",
-      custom_key: ""
+ 
     };
   },
   apollo: {},
   methods: {
-    add () {
-      this.inputs.push({
-        name: '',
-        party: ''
-      })
-      console.log(this.inputs)
-    },
-
-    remove (index) {
-      this.inputs.splice(index, 1)
-    },
-
     async getList() {
       return await this.$apollo.query({
         query: require("@/graphql/queries/showList.gql"),
